@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.util.List;
 
 public class StatusViewAdapter extends RecyclerView.Adapter<StatusViewAdapter.StatusViewHolder>
@@ -48,9 +51,13 @@ public class StatusViewAdapter extends RecyclerView.Adapter<StatusViewAdapter.St
 
         else
         {
-            Bitmap bitmap = BitmapFactory.decodeFile(filesPath.get(i));
+            /*Bitmap bitmap = BitmapFactory.decodeFile(filesPath.get(i));
+            Bitmap bitmap2=ThumbnailUtils.extractThumbnail(bitmap,bitmap.getWidth()/2,
+                    bitmap.getHeight()/2);
             statusViewHolder.statusImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            statusViewHolder.statusImageView.setImageBitmap(bitmap);
+            statusViewHolder.statusImageView.setImageBitmap(bitmap2);*/
+
+            Picasso.get().load(new File(filePath)).into(statusViewHolder.statusImageView);
 
         }
 

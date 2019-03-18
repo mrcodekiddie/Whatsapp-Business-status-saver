@@ -16,13 +16,17 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
     List<String> filePaths;
     RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,8 +50,8 @@ public class MainActivity extends AppCompatActivity
 
     private void proceedNext()
     {
-        recyclerView=findViewById(R.id.mRecyclerView);
-        StatusViewAdapter adapter=new StatusViewAdapter(filePaths,this);
+        recyclerView = findViewById(R.id.mRecyclerView);
+        StatusViewAdapter adapter = new StatusViewAdapter(filePaths, this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
@@ -61,15 +65,18 @@ public class MainActivity extends AppCompatActivity
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();
+
         Log.d("Files", "Size: " + files.length);
         for (int i = 0; i < files.length; i++)
         {
             Log.d("Files", "FileName:" + files[i].getName());
-            String filePath=files[i].getAbsolutePath();
-            Log.d("Filesx",filePath);
-            Log.d("FilesY",filePath.substring(filePath.length()-4));
+            String filePath = files[i].getAbsolutePath();
+            Log.d("Filesx", filePath);
+            Log.d("FilesY", filePath.substring(filePath.length() - 4));
+            Log.d("FilesZ", String.valueOf(files[i].lastModified()) + " : " + new Date(files[i].lastModified()).toString());
             filePaths.add(filePath);
         }
+        filePaths=sortFiles(files);
     }
 
     private void showPermissionRequestAlertmessage()
@@ -119,4 +126,27 @@ public class MainActivity extends AppCompatActivity
                 }
         }
     }
+
+    public List<String> sortFiles(File[] files)
+    {
+        List<String> tempFilesList=filePaths;
+
+        for(int i=0;i<files.length;i++)
+        {
+
+            for(int j=0;j<files.length;j++)
+            {
+                if(files[i].lastModified()>files[j].lastModified())
+                {
+                    String path1=files[i].getAbsolutePath();
+                    String path2=files[j].getAbsolutePath();
+                    tempFilesList.set(i,path2);
+                    tempFilesList.set(j,path1);
+                }
+            }
+        }
+        return tempFilesList;
+    }
+
+
 }
